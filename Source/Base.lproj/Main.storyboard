@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
+    <device id="ipad12_9" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="tXr-a1-R10">
+            <objects>
+                <viewController id="BV1-FR-VrT" customClass="ViewController" customModule="SpinArt" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="JAq-Ww-bi2" customClass="UserInterfaceView" customModule="SpinArt" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="1366"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vln-H0-HN8" userLabel="MetalView" customClass="MetalView" customModule="SpinArt" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="1024" height="1273"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <gestureRecognizers/>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eHi-7w-7L9">
+                                <rect key="frame" x="925" y="1299" width="79" height="44"/>
+                                <color key="backgroundColor" name="keyboardFocusIndicatorColor" catalog="System" colorSpace="catalog"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="79" id="T0c-6Y-JMn"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                <state key="normal" title="Reset">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="resetPressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="3WI-CP-B6c"/>
+                                </connections>
+                            </button>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="rWt-h2-946">
+                                <rect key="frame" x="20" y="1310" width="294" height="29"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="294" id="ALD-9t-tup"/>
+                                </constraints>
+                                <segments>
+                                    <segment title="Point"/>
+                                    <segment title="Line"/>
+                                    <segment title="Cube"/>
+                                </segments>
+                                <color key="tintColor" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
+                                <connections>
+                                    <action selector="styleChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="z0v-xs-wjQ"/>
+                                </connections>
+                            </segmentedControl>
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="43I-PA-wwF">
+                                <rect key="frame" x="484" y="1310" width="287" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="29" id="HnV-c5-TXK"/>
+                                    <constraint firstAttribute="width" constant="283" id="Na9-BJ-j8e"/>
+                                </constraints>
+                                <connections>
+                                    <action selector="speedChanged:" destination="BV1-FR-VrT" eventType="valueChanged" id="jWi-9R-Q33"/>
+                                </connections>
+                            </slider>
+                        </subviews>
+                        <color key="backgroundColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="eHi-7w-7L9" firstAttribute="trailing" secondItem="JAq-Ww-bi2" secondAttribute="trailingMargin" id="0zq-6x-WMu"/>
+                            <constraint firstItem="eHi-7w-7L9" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="JAq-Ww-bi2" secondAttribute="leadingMargin" id="19w-WH-I47"/>
+                            <constraint firstItem="vln-H0-HN8" firstAttribute="leading" secondItem="JAq-Ww-bi2" secondAttribute="leading" id="ED2-uW-Dhn"/>
+                            <constraint firstItem="eHi-7w-7L9" firstAttribute="top" secondItem="vln-H0-HN8" secondAttribute="bottom" constant="26" id="Nrs-y1-wA7"/>
+                            <constraint firstItem="rWt-h2-946" firstAttribute="top" secondItem="43I-PA-wwF" secondAttribute="top" id="Ogg-KH-MSh"/>
+                            <constraint firstItem="5WR-yj-HvR" firstAttribute="bottom" secondItem="43I-PA-wwF" secondAttribute="bottom" constant="27" id="Q7s-No-vDH"/>
+                            <constraint firstAttribute="trailing" secondItem="vln-H0-HN8" secondAttribute="trailing" id="QU4-kY-LUk"/>
+                            <constraint firstItem="rWt-h2-946" firstAttribute="leading" secondItem="JAq-Ww-bi2" secondAttribute="leadingMargin" id="ZMp-8i-LML"/>
+                            <constraint firstItem="43I-PA-wwF" firstAttribute="top" secondItem="vln-H0-HN8" secondAttribute="bottom" constant="37" id="eE8-Jq-YDF"/>
+                            <constraint firstItem="43I-PA-wwF" firstAttribute="leading" secondItem="JAq-Ww-bi2" secondAttribute="leading" constant="486" id="mce-5o-lG1"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="rWt-h2-946" secondAttribute="trailingMargin" id="ova-Qg-72y"/>
+                            <constraint firstItem="vln-H0-HN8" firstAttribute="top" secondItem="JAq-Ww-bi2" secondAttribute="top" id="q1r-EM-lV9"/>
+                            <constraint firstItem="5WR-yj-HvR" firstAttribute="bottom" secondItem="eHi-7w-7L9" secondAttribute="bottom" constant="23" id="yrI-KK-Y9f"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="5WR-yj-HvR"/>
+                    </view>
+                    <connections>
+                        <outlet property="metalView" destination="vln-H0-HN8" id="TT6-kV-EtA"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-372.0703125" y="-36.017569546120058"/>
+        </scene>
+    </scenes>
+</document>
