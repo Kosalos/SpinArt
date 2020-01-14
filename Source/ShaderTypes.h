@@ -1,7 +1,6 @@
 #pragma once
 
 #include <simd/simd.h>
-#include <simd/base.h>
 
 struct TVertex {
     vector_float3 pos;

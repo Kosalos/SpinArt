@@ -46,29 +46,29 @@ class PointCloud {
         var b = CGFloat()
         var a = CGFloat()
         drawColor.getRed(&r, green: &g, blue: &b, alpha: &a)
-        let color = float4(Float(r),Float(g),Float(b),Float(1))
+        let color = simd_float4(Float(r),Float(g),Float(b),Float(1))
         
-        let pos:float3 = float3(x,y,z)
+        let pos:simd_float3 = simd_float3(x,y,z)
         
-        func spin(_ vv:float3) -> float3 {
+        func spin(_ vv:simd_float3) -> simd_float3 {
             var ans = vv
             ans.x = ans.x * cc - ans.z * ss
             ans.z = vv.x * ss + ans.z * cc
             return ans
         }
         
-        let p1 = spin(float3(-sz,-sz,-sz)) + pos
-        let p2 = spin(float3(+sz,-sz,-sz)) + pos
-        let p3 = spin(float3(+sz,+sz,-sz)) + pos
-        let p4 = spin(float3(-sz,+sz,-sz)) + pos
-        let p5 = spin(float3(-sz,-sz,+sz)) + pos
-        let p6 = spin(float3(+sz,-sz,+sz)) + pos
-        let p7 = spin(float3(+sz,+sz,+sz)) + pos
-        let p8 = spin(float3(-sz,+sz,+sz)) + pos
+        let p1 = spin(simd_float3(-sz,-sz,-sz)) + pos
+        let p2 = spin(simd_float3(+sz,-sz,-sz)) + pos
+        let p3 = spin(simd_float3(+sz,+sz,-sz)) + pos
+        let p4 = spin(simd_float3(-sz,+sz,-sz)) + pos
+        let p5 = spin(simd_float3(-sz,-sz,+sz)) + pos
+        let p6 = spin(simd_float3(+sz,-sz,+sz)) + pos
+        let p7 = spin(simd_float3(+sz,+sz,+sz)) + pos
+        let p8 = spin(simd_float3(-sz,+sz,+sz)) + pos
 
         let tBase = UInt16(pData.count)
         
-        func zTVertex(_ zpt:float3) -> TVertex {
+        func zTVertex(_ zpt:simd_float3) -> TVertex {
             var t = TVertex(zpt,color)
             t.nrm = zpt - pos
             t.nrm = normalize(t.nrm)
@@ -119,7 +119,7 @@ class PointCloud {
         var a = CGFloat()
         drawColor.getRed(&r, green: &g, blue: &b, alpha: &a)
 
-        pData.append(TVertex(float3(x,y,z), float4(Float(r),Float(g),Float(b),Float(1))))
+        pData.append(TVertex(simd_float3(x,y,z), simd_float4(Float(r),Float(g),Float(b),Float(1))))
 
         if pData.count > 0 {
             pBuffer  = gDevice?.makeBuffer(bytes: pData,  length: pData.count  * MemoryLayout<TVertex>.size, options: MTLResourceOptions())
@@ -128,7 +128,7 @@ class PointCloud {
 
     func render(_ renderEncoder:MTLRenderCommandEncoder) {
         if pData.count > 0 {
-            renderEncoder.setVertexBuffer(pBuffer, offset: 0, at: 0)
+            renderEncoder.setVertexBuffer(pBuffer, offset: 0, index: 0)
 
             switch style {
             case 0 :

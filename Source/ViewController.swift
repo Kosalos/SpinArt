@@ -2,7 +2,7 @@ import UIKit
 import MetalKit
 
 var timer = Timer()
-var bounds:float2 = float2()
+var bounds:simd_float2 = simd_float2()
 var style:Int = 0   // 0,1,2 = point,line,cube
 
 class ViewController: UIViewController{

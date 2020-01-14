@@ -4,33 +4,33 @@ import ARKit
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 extension TVertex {
-    init(_ p:float3) {
+    init(_ p:simd_float3) {
         self.init()
         pos = p
-        nrm = float3()
-        txt = float2(0,0)
-        color = float4(1,1,1,1)
+        nrm = simd_float3()
+        txt = simd_float2(0,0)
+        color = simd_float4(1,1,1,1)
         drawStyle = 0
     }
     
-    init(_ p:float3, _ ncolor:float4) {
+    init(_ p:simd_float3, _ ncolor:simd_float4) {
         self.init()
         pos = p
-        nrm = float3()
-        txt = float2(0,0)
+        nrm = simd_float3()
+        txt = simd_float2(0,0)
         color = ncolor
         drawStyle = 0
     }
 }
 
 extension PVertex {
-    init(_ p:float3) {
+    init(_ p:simd_float3) {
         self.init()
         pos = p
-        color = float4(1,1,1,1)
+        color = simd_float4(1,1,1,1)
     }
     
-    init(_ p:float3, _ ncolor:float4) {
+    init(_ p:simd_float3, _ ncolor:simd_float4) {
         self.init()
         pos = p
         color = ncolor
@@ -40,7 +40,7 @@ extension PVertex {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Generic matrix math utility functions
-func matrix4x4_rotation(_ radians: Float, _ axis: float3) -> matrix_float4x4 {
+func matrix4x4_rotation(_ radians: Float, _ axis: simd_float3) -> matrix_float4x4 {
     let unitAxis = normalize(axis)
     let ct = cosf(radians)
     let st = sinf(radians)
@@ -73,7 +73,7 @@ func radians_from_degrees(_ degrees: Float) -> Float {
     return (degrees / 180) * .pi
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 // MARK: - Collection extensions
 extension Array where Iterator.Element == Float {
@@ -89,13 +89,13 @@ extension Array where Iterator.Element == Float {
 	}
 }
 
-extension Array where Iterator.Element == float3 {
-	var average: float3? {
+extension Array where Iterator.Element == simd_float3 {
+	var average: simd_float3? {
 		guard !self.isEmpty else {
 			return nil
 		}
   
-        let sum = self.reduce(float3(0)) { current, next in
+        let sum = self.reduce(simd_float3(repeating: 0)) { current, next in
             return current + next
         }
 		return sum / Float(self.count)
@@ -115,7 +115,7 @@ extension RangeReplaceableCollection { // zorro where IndexDistance == Int {
 extension SCNNode {
 	
 	func setUniformScale(_ scale: Float) {
-		self.simdScale = float3(scale, scale, scale)
+		self.simdScale = simd_float3(scale, scale, scale)
 	}
 	
 	func renderOnTop(_ enable: Bool) {
@@ -136,9 +136,9 @@ extension SCNNode {
 extension float4x4 {
     /// Treats matrix as a (right-hand column-major convention) transform matrix
     /// and factors out the translation component of the transform.
-    var translation: float3 {
+    var translation: simd_float3 {
         let translation = self.columns.3
-        return float3(translation.x, translation.y, translation.z)
+        return simd_float3(translation.x, translation.y, translation.z)
     }
 }
 
@@ -252,7 +252,7 @@ extension CGRect {
 	}
 }
 
-func rayIntersectionWithHorizontalPlane(rayOrigin: float3, direction: float3, planeY: Float) -> float3? {
+func rayIntersectionWithHorizontalPlane(rayOrigin: simd_float3, direction: simd_float3, planeY: Float) -> simd_float3? {
 	
     let direction = simd_normalize(direction)
 

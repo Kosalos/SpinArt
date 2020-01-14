@@ -21,7 +21,7 @@ var constantsIndex: Int = 0
 let kInFlightCommandBuffers = 3
 var translationAmount = Float(-10)
 
-var lightpos:float3 = float3()
+var lightpos:simd_float3 = simd_float3()
 var lAngle:Float = 0
 
 var spinAngle:Float = 0
@@ -43,10 +43,10 @@ class Renderer: NSObject, MTKViewDelegate {
 
     init?(metalKitView: MTKView) {
         gDevice = metalKitView.device!
-        self.commandQueue = gDevice.makeCommandQueue()
+        self.commandQueue = gDevice.makeCommandQueue()!
         
         let uniformBufferSize = alignedUniformsSize * maxBuffersInFlight
-        dynamicUniformBuffer = gDevice.makeBuffer(length:uniformBufferSize, options:[MTLResourceOptions.storageModeShared])//buffer
+        dynamicUniformBuffer = gDevice.makeBuffer(length:uniformBufferSize, options:[MTLResourceOptions.storageModeShared])!//buffer
         
         uniforms = UnsafeMutableRawPointer(dynamicUniformBuffer.contents()).bindMemory(to:Uniforms.self, capacity:1)
         
@@ -63,7 +63,7 @@ class Renderer: NSObject, MTKViewDelegate {
         let depthStateDesciptor = MTLDepthStencilDescriptor()
         depthStateDesciptor.depthCompareFunction = MTLCompareFunction.less
         depthStateDesciptor.isDepthWriteEnabled = true
-        depthState = gDevice.makeDepthStencilState(descriptor:depthStateDesciptor)
+        depthState = gDevice.makeDepthStencilState(descriptor:depthStateDesciptor)!
 
         pointCloud = PointCloud()
         
@@ -76,7 +76,7 @@ class Renderer: NSObject, MTKViewDelegate {
         
         constants = []
         for _ in 0..<kInFlightCommandBuffers {
-            constants.append(gDevice.makeBuffer(length: constantsSize, options: []))
+            constants.append(gDevice.makeBuffer(length: constantsSize, options: [])!)
         }
         
         super.init()
@@ -107,7 +107,7 @@ class Renderer: NSObject, MTKViewDelegate {
     class func buildRenderPipelineWithDevice(device: MTLDevice,
                                              metalKitView: MTKView,
                                              mtlVertexDescriptor: MTLVertexDescriptor) throws -> MTLRenderPipelineState {
-        let library = device.newDefaultLibrary()
+        let library = device.makeDefaultLibrary()
         
         let vFunction = library?.makeFunction(name: "texturedVertexShader")
         let fFunction = library?.makeFunction(name: "texturedFragmentShader")
@@ -128,7 +128,7 @@ class Renderer: NSObject, MTKViewDelegate {
     
     class func loadTexture(device: MTLDevice, textureName: String) throws -> MTLTexture {
         let textureLoader = MTKTextureLoader(device: device)
-        return try textureLoader.newTexture(withName: textureName, scaleFactor: 1.0, bundle: nil,  options: nil)
+        return try textureLoader.newTexture(name: textureName, scaleFactor: 1.0, bundle: nil,  options: nil)
     }
     
     private func updateDynamicBufferState() {
@@ -143,26 +143,26 @@ class Renderer: NSObject, MTKViewDelegate {
         let commandBuffer = commandQueue.makeCommandBuffer()
         
         let semaphore = inFlightSemaphore
-        commandBuffer.addCompletedHandler { (_ commandBuffer)-> Swift.Void in semaphore.signal() }
+        commandBuffer!.addCompletedHandler { (_ commandBuffer)-> Swift.Void in semaphore.signal() }
         
         self.updateDynamicBufferState()
         
         let renderPassDescriptor = view.currentRenderPassDescriptor
-        let renderEncoder = commandBuffer.makeRenderCommandEncoder(descriptor: renderPassDescriptor!)
-        renderEncoder.setCullMode(.back)
-        renderEncoder.setFrontFacing(.counterClockwise)
-        renderEncoder.setRenderPipelineState(pipelineState)
-        renderEncoder.setDepthStencilState(depthState)
-        renderEncoder.setVertexBuffer(dynamicUniformBuffer, offset:uniformBufferOffset, at: 2)
-        renderEncoder.setFragmentBuffer(dynamicUniformBuffer, offset:uniformBufferOffset, at: 2)
-        renderEncoder.setFragmentTexture(colorMap, at:0)
+        let renderEncoder = commandBuffer!.makeRenderCommandEncoder(descriptor: renderPassDescriptor!)
+        renderEncoder!.setCullMode(.back)
+        renderEncoder!.setFrontFacing(.counterClockwise)
+        renderEncoder!.setRenderPipelineState(pipelineState)
+        renderEncoder!.setDepthStencilState(depthState)
+        renderEncoder!.setVertexBuffer(dynamicUniformBuffer, offset:uniformBufferOffset, index: 2)
+        renderEncoder!.setFragmentBuffer(dynamicUniformBuffer, offset:uniformBufferOffset, index: 2)
+        renderEncoder!.setFragmentTexture(colorMap, index:0)
 
         // -----------------------------
         let constant_buffer = constants[constantsIndex].contents().assumingMemoryBound(to: ConstantData.self)
         constant_buffer[0].mvp =
             projectionMatrix
             * matrix4x4_translation(0,0,translationAmount)
-            * matrix4x4_rotation(spinAngle,float3(0,1,0))
+            * matrix4x4_rotation(spinAngle,simd_float3(0,1,0))
         
         spinAngle += spinAngleDelta
         
@@ -172,16 +172,16 @@ class Renderer: NSObject, MTKViewDelegate {
         lAngle += 0.01
         constant_buffer[0].light = normalize(lightpos)
         
-        renderEncoder.setVertexBuffer(constants[constantsIndex], offset:0, at: 1)
+        renderEncoder!.setVertexBuffer(constants[constantsIndex], offset:0, index: 1)
 
         // ----------------------------------------------
-        pointCloud.render(renderEncoder)
+        pointCloud.render(renderEncoder!)
         // ----------------------------------------------
 
-        renderEncoder.endEncoding()
+        renderEncoder!.endEncoding()
         
-        if let drawable = view.currentDrawable { commandBuffer.present(drawable)  }
-        commandBuffer.commit()
+        if let drawable = view.currentDrawable { commandBuffer!.present(drawable)  }
+        commandBuffer!.commit()
         constantsIndex = (constantsIndex + 1) % kInFlightCommandBuffers
     }
     
